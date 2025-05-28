@@ -1,0 +1,45 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE89_SQL_Injection__getCookies_Servlet_prepareStatement_68a.java
+Label Definition File: CWE89_SQL_Injection.label.xml
+Template File: sources-sinks-68a.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 89 SQL Injection
+ * BadSource: getCookies_Servlet Read data from the first cookie using getCookies()
+ * GoodSource: A hardcoded string
+ * Sinks: prepareStatement
+ *    GoodSink: Use prepared statement and execute (properly)
+ *    BadSink : data concatenated into SQL statement used in prepareStatement() call, which could result in SQL Injection
+ * Flow Variant: 68 Data flow: data passed as a member variable in the "a" class, which is used by a method in another class in the same package
+ *
+ * */
+
+package testcases.CWE89_SQL_Injection.s02;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+
+public class CWE89_SQL_Injection__getCookies_Servlet_prepareStatement_68a extends AbstractTestCaseServlet
+{
+    public static String data;
+
+    public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable
+    {
+
+        data = ""; /* initialize data in case there are no cookies */
+
+        /* Read data from cookies */
+        {
+            Cookie cookieSources[] = request.getCookies();
+            if (cookieSources != null)
+            {
+                /* POTENTIAL FLAW: Read data from the first cookie value */
+                data = cookieSources[0].getValue();
+            }
+        }
+
+        (new CWE89_SQL_Injection__getCookies_Servlet_prepareStatement_68b()).badSink(request, response);
+    }
+}

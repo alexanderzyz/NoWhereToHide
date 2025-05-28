@@ -1,0 +1,54 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE129_Improper_Validation_of_Array_Index__large_fixed_array_size_16.java
+Label Definition File: CWE129_Improper_Validation_of_Array_Index.label.xml
+Template File: sources-sinks-16.tmpl.java
+*/
+/*
+* @description
+* CWE: 129 Improper Validation of Array Index
+* BadSource: large_fixed Set data to a value greater than the size of the array
+* GoodSource: A hardcoded non-zero, non-min, non-max, even number
+* Sinks: array_size
+*    GoodSink: data is used to set the size of the array and it must be greater than 0
+*    BadSink : data is used to set the size of the array, but it could be set to 0
+* Flow Variant: 16 Control flow: while(true)
+*
+* */
+
+package testcases.CWE129_Improper_Validation_of_Array_Index.s03;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+public class CWE129_Improper_Validation_of_Array_Index__large_fixed_array_size_16 extends AbstractTestCase
+{
+    public void bad() throws Throwable
+    {
+        int data;
+
+        while (true)
+        {
+            /* POTENTIAL FLAW: Set data to a value greater than the size of the array */
+            data = 100;
+            break;
+        }
+
+        while (true)
+        {
+            int array[] = null;
+            /* POTENTIAL FLAW: Verify that data is non-negative, but still allow it to be 0 */
+            if (data >= 0)
+            {
+                array = new int[data];
+            }
+            else
+            {
+                IO.writeLine("Array size is negative");
+            }
+            /* do something with the array */
+            array[0] = 5;
+            IO.writeLine(array[0]);
+            break;
+        }
+    }
+}

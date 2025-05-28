@@ -1,0 +1,40 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE477_Obsolete_Functions__Date_parse_12.java
+Label Definition File: CWE477_Obsolete_Functions.label.xml
+Template File: point-flaw-12.tmpl.java
+*/
+/*
+* @description
+* CWE: 477 Use of Obsolete Functions
+* Sinks: Date_parse
+*    GoodSink: Use of preferred java.text.DateFormat.parse(String)
+*    BadSink : Use of deprecated java.util.Date.parse(String) method
+* Flow Variant: 12 Control flow: if(IO.staticReturnsTrueOrFalse())
+*
+* */
+
+package testcases.CWE477_Obsolete_Functions;
+
+import testcasesupport.*;
+
+public class CWE477_Obsolete_Functions__Date_parse_12 extends AbstractTestCase
+{
+    public void bad() throws Throwable
+    {
+        if (IO.staticReturnsTrueOrFalse())
+        {
+            /* FLAW: Use of deprecated Date.parse(String) method */
+            long unixDate = java.util.Date.parse("2010-07-13 10:41:00");
+            IO.writeLine(unixDate); /* Use unixDate */
+        }
+        else
+        {
+
+            /* FIX: Use preferred DateFormat.parse(String) method */
+            java.util.Date date = java.text.DateFormat.getInstance().parse("2010-07-13 10:41:00");
+
+            IO.writeLine(date.toString()); /* Use date */
+
+        }
+    }
+}

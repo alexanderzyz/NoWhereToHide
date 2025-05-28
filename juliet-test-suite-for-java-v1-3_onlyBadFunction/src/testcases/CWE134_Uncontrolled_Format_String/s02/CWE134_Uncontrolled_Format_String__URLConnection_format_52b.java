@@ -1,0 +1,27 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE134_Uncontrolled_Format_String__URLConnection_format_52b.java
+Label Definition File: CWE134_Uncontrolled_Format_String.label.xml
+Template File: sources-sinks-52b.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 134 Uncontrolled Format String
+ * BadSource: URLConnection Read data from a web server with URLConnection
+ * GoodSource: A hardcoded string
+ * Sinks: format
+ *    GoodSink: dynamic formatted stdout with string defined
+ *    BadSink : dynamic formatted stdout without validation
+ * Flow Variant: 52 Data flow: data passed as an argument from one method to another to another in three different classes in the same package
+ *
+ * */
+
+package testcases.CWE134_Uncontrolled_Format_String.s02;
+import testcasesupport.*;
+
+public class CWE134_Uncontrolled_Format_String__URLConnection_format_52b
+{
+    public void badSink(String data ) throws Throwable
+    {
+        (new CWE134_Uncontrolled_Format_String__URLConnection_format_52c()).badSink(data );
+    }
+}

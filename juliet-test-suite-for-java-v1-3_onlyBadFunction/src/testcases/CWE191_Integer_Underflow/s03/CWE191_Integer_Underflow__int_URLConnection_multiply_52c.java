@@ -1,0 +1,36 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE191_Integer_Underflow__int_URLConnection_multiply_52c.java
+Label Definition File: CWE191_Integer_Underflow__int.label.xml
+Template File: sources-sinks-52c.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 191 Integer Underflow
+ * BadSource: URLConnection Read data from a web server with URLConnection
+ * GoodSource: A hardcoded non-zero, non-min, non-max, even number
+ * Sinks: multiply
+ *    GoodSink: Ensure there will not be an underflow before multiplying data by 2
+ *    BadSink : If data is negative, multiply by 2, which can cause an underflow
+ * Flow Variant: 52 Data flow: data passed as an argument from one method to another to another in three different classes in the same package
+ *
+ * */
+
+package testcases.CWE191_Integer_Underflow.s03;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+public class CWE191_Integer_Underflow__int_URLConnection_multiply_52c
+{
+    public void badSink(int data ) throws Throwable
+    {
+
+        if(data < 0) /* ensure we won't have an overflow */
+        {
+            /* POTENTIAL FLAW: if (data * 2) < Integer.MIN_VALUE, this will underflow */
+            int result = (int)(data * 2);
+            IO.writeLine("result: " + result);
+        }
+
+    }
+}

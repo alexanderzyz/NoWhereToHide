@@ -1,0 +1,33 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE134_Uncontrolled_Format_String__listen_tcp_format_52c.java
+Label Definition File: CWE134_Uncontrolled_Format_String.label.xml
+Template File: sources-sinks-52c.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 134 Uncontrolled Format String
+ * BadSource: listen_tcp Read data using a listening tcp connection
+ * GoodSource: A hardcoded string
+ * Sinks: format
+ *    GoodSink: dynamic formatted stdout with string defined
+ *    BadSink : dynamic formatted stdout without validation
+ * Flow Variant: 52 Data flow: data passed as an argument from one method to another to another in three different classes in the same package
+ *
+ * */
+
+package testcases.CWE134_Uncontrolled_Format_String.s01;
+import testcasesupport.*;
+
+public class CWE134_Uncontrolled_Format_String__listen_tcp_format_52c
+{
+    public void badSink(String data ) throws Throwable
+    {
+
+        if (data != null)
+        {
+            /* POTENTIAL FLAW: uncontrolled string formatting */
+            System.out.format(data);
+        }
+
+    }
+}

@@ -1,0 +1,53 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE369_Divide_by_Zero__int_Environment_modulo_68a.java
+Label Definition File: CWE369_Divide_by_Zero__int.label.xml
+Template File: sources-sinks-68a.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 369 Divide by zero
+ * BadSource: Environment Read data from an environment variable
+ * GoodSource: A hardcoded non-zero, non-min, non-max, even number
+ * Sinks: modulo
+ *    GoodSink: Check for zero before modulo
+ *    BadSink : Modulo by a value that may be zero
+ * Flow Variant: 68 Data flow: data passed as a member variable in the "a" class, which is used by a method in another class in the same package
+ *
+ * */
+
+package testcases.CWE369_Divide_by_Zero.s02;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+import java.util.logging.Level;
+
+public class CWE369_Divide_by_Zero__int_Environment_modulo_68a extends AbstractTestCase
+{
+    public static int data;
+
+    public void bad() throws Throwable
+    {
+
+        data = Integer.MIN_VALUE; /* Initialize data */
+
+        /* get environment variable ADD */
+        /* POTENTIAL FLAW: Read data from an environment variable */
+        {
+            String stringNumber = System.getenv("ADD");
+            if (stringNumber != null) // avoid NPD incidental warnings
+            {
+                try
+                {
+                    data = Integer.parseInt(stringNumber.trim());
+                }
+                catch(NumberFormatException exceptNumberFormat)
+                {
+                    IO.logger.log(Level.WARNING, "Number format exception parsing data from string", exceptNumberFormat);
+                }
+            }
+        }
+
+        (new CWE369_Divide_by_Zero__int_Environment_modulo_68b()).badSink();
+    }
+}

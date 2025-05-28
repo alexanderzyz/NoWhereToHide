@@ -1,0 +1,160 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE89_SQL_Injection__connect_tcp_execute_09.java
+Label Definition File: CWE89_SQL_Injection.label.xml
+Template File: sources-sinks-09.tmpl.java
+*/
+/*
+* @description
+* CWE: 89 SQL Injection
+* BadSource: connect_tcp Read data using an outbound tcp connection
+* GoodSource: A hardcoded string
+* Sinks: execute
+*    GoodSink: Use prepared statement and execute (properly)
+*    BadSink : data concatenated into SQL statement used in execute(), which could result in SQL Injection
+* Flow Variant: 09 Control flow: if(IO.STATIC_FINAL_TRUE) and if(IO.STATIC_FINAL_FALSE)
+*
+* */
+
+package testcases.CWE89_SQL_Injection.s01;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.net.Socket;
+
+import java.util.logging.Level;
+
+import java.sql.*;
+
+
+public class CWE89_SQL_Injection__connect_tcp_execute_09 extends AbstractTestCase
+{
+    public void bad() throws Throwable
+    {
+        String data;
+        if (IO.STATIC_FINAL_TRUE)
+        {
+            data = ""; /* Initialize data */
+            /* Read data using an outbound tcp connection */
+            {
+                Socket socket = null;
+                BufferedReader readerBuffered = null;
+                InputStreamReader readerInputStream = null;
+                try
+                {
+                    /* Read data using an outbound tcp connection */
+                    socket = new Socket("host.example.org", 39544);
+                    /* read input from socket */
+                    readerInputStream = new InputStreamReader(socket.getInputStream(), "UTF-8");
+                    readerBuffered = new BufferedReader(readerInputStream);
+                    /* POTENTIAL FLAW: Read data using an outbound tcp connection */
+                    data = readerBuffered.readLine();
+                }
+                catch (IOException exceptIO)
+                {
+                    IO.logger.log(Level.WARNING, "Error with stream reading", exceptIO);
+                }
+                finally
+                {
+                    /* clean up stream reading objects */
+                    try
+                    {
+                        if (readerBuffered != null)
+                        {
+                            readerBuffered.close();
+                        }
+                    }
+                    catch (IOException exceptIO)
+                    {
+                        IO.logger.log(Level.WARNING, "Error closing BufferedReader", exceptIO);
+                    }
+
+                    try
+                    {
+                        if (readerInputStream != null)
+                        {
+                            readerInputStream.close();
+                        }
+                    }
+                    catch (IOException exceptIO)
+                    {
+                        IO.logger.log(Level.WARNING, "Error closing InputStreamReader", exceptIO);
+                    }
+
+                    /* clean up socket objects */
+                    try
+                    {
+                        if (socket != null)
+                        {
+                            socket.close();
+                        }
+                    }
+                    catch (IOException exceptIO)
+                    {
+                        IO.logger.log(Level.WARNING, "Error closing Socket", exceptIO);
+                    }
+                }
+            }
+        }
+        else
+        {
+            /* INCIDENTAL: CWE 561 Dead Code, the code below will never run
+             * but ensure data is inititialized before the Sink to avoid compiler errors */
+            data = null;
+        }
+
+        if (IO.STATIC_FINAL_TRUE)
+        {
+            Connection dbConnection = null;
+            Statement sqlStatement = null;
+            try
+            {
+                dbConnection = IO.getDBConnection();
+                sqlStatement = dbConnection.createStatement();
+                /* POTENTIAL FLAW: data concatenated into SQL statement used in execute(), which could result in SQL Injection */
+                Boolean result = sqlStatement.execute("insert into users (status) values ('updated') where name='"+data+"'");
+                if(result)
+                {
+                    IO.writeLine("Name, " + data + ", updated successfully");
+                }
+                else
+                {
+                    IO.writeLine("Unable to update records for user: " + data);
+                }
+            }
+            catch (SQLException exceptSql)
+            {
+                IO.logger.log(Level.WARNING, "Error getting database connection", exceptSql);
+            }
+            finally
+            {
+                try
+                {
+                    if (sqlStatement != null)
+                    {
+                        sqlStatement.close();
+                    }
+                }
+                catch (SQLException exceptSql)
+                {
+                    IO.logger.log(Level.WARNING, "Error closing Statement", exceptSql);
+                }
+
+                try
+                {
+                    if (dbConnection != null)
+                    {
+                        dbConnection.close();
+                    }
+                }
+                catch (SQLException exceptSql)
+                {
+                    IO.logger.log(Level.WARNING, "Error closing Connection", exceptSql);
+                }
+            }
+        }
+    }
+}

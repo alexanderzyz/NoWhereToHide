@@ -1,0 +1,111 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE190_Integer_Overflow__short_console_readLine_postinc_05.java
+Label Definition File: CWE190_Integer_Overflow.label.xml
+Template File: sources-sinks-05.tmpl.java
+*/
+/*
+* @description
+* CWE: 190 Integer Overflow
+* BadSource: console_readLine Read data from the console using readLine
+* GoodSource: A hardcoded non-zero, non-min, non-max, even number
+* Sinks: increment
+*    GoodSink: Ensure there will not be an overflow before incrementing data
+*    BadSink : Increment data, which can cause an overflow
+* Flow Variant: 05 Control flow: if(privateTrue) and if(privateFalse)
+*
+* */
+
+package testcases.CWE190_Integer_Overflow.s06;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+
+import java.util.logging.Level;
+
+public class CWE190_Integer_Overflow__short_console_readLine_postinc_05 extends AbstractTestCase
+{
+    /* The two variables below are not defined as "final", but are never
+     * assigned any other value, so a tool should be able to identify that
+     * reads of these will always return their initialized values.
+     */
+    private boolean privateTrue = true;
+    private boolean privateFalse = false;
+
+    public void bad() throws Throwable
+    {
+        short data;
+        if (privateTrue)
+        {
+            /* init data */
+            data = -1;
+            /* POTENTIAL FLAW: Read data from console with readLine*/
+            BufferedReader readerBuffered = null;
+            InputStreamReader readerInputStream = null;
+            try
+            {
+                readerInputStream = new InputStreamReader(System.in, "UTF-8");
+                readerBuffered = new BufferedReader(readerInputStream);
+                String stringNumber = readerBuffered.readLine();
+                if (stringNumber != null)
+                {
+                    data = Short.parseShort(stringNumber.trim());
+                }
+            }
+            catch (IOException exceptIO)
+            {
+                IO.logger.log(Level.WARNING, "Error with stream reading", exceptIO);
+            }
+            catch (NumberFormatException exceptNumberFormat)
+            {
+                IO.logger.log(Level.WARNING, "Error with number parsing", exceptNumberFormat);
+            }
+            finally
+            {
+                /* clean up stream reading objects */
+                try
+                {
+                    if (readerBuffered != null)
+                    {
+                        readerBuffered.close();
+                    }
+                }
+                catch (IOException exceptIO)
+                {
+                    IO.logger.log(Level.WARNING, "Error closing BufferedReader", exceptIO);
+                }
+                finally
+                {
+                    try
+                    {
+                        if (readerInputStream != null)
+                        {
+                            readerInputStream.close();
+                        }
+                    }
+                    catch (IOException exceptIO)
+                    {
+                        IO.logger.log(Level.WARNING, "Error closing InputStreamReader", exceptIO);
+                    }
+                }
+            }
+        }
+        else
+        {
+            /* INCIDENTAL: CWE 561 Dead Code, the code below will never run
+             * but ensure data is inititialized before the Sink to avoid compiler errors */
+            data = 0;
+        }
+
+        if (privateTrue)
+        {
+            /* POTENTIAL FLAW: if data == Short.MAX_VALUE, this will overflow */
+            data++;
+            short result = (short)(data);
+            IO.writeLine("result: " + result);
+        }
+    }
+}

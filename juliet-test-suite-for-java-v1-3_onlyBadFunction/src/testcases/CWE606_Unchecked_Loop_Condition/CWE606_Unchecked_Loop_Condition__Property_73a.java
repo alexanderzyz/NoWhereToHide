@@ -1,0 +1,41 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE606_Unchecked_Loop_Condition__Property_73a.java
+Label Definition File: CWE606_Unchecked_Loop_Condition.label.xml
+Template File: sources-sinks-73a.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 606 Unchecked Input for Loop Condition
+ * BadSource: Property Read data from a system property
+ * GoodSource: hardcoded int in string form
+ * Sinks:
+ *    GoodSink: validate loop variable
+ *    BadSink : loop variable not validated
+ * Flow Variant: 73 Data flow: data passed in a LinkedList from one method to another in different source files in the same package
+ *
+ * */
+
+package testcases.CWE606_Unchecked_Loop_Condition;
+
+import testcasesupport.*;
+import java.util.LinkedList;
+
+import javax.servlet.http.*;
+
+public class CWE606_Unchecked_Loop_Condition__Property_73a extends AbstractTestCase
+{
+    public void bad() throws Throwable
+    {
+        String data;
+
+        /* get system property user.home */
+        /* POTENTIAL FLAW: Read data from a system property */
+        data = System.getProperty("user.home");
+
+        LinkedList<String> dataLinkedList = new LinkedList<String>();
+        dataLinkedList.add(0, data);
+        dataLinkedList.add(1, data);
+        dataLinkedList.add(2, data);
+        (new CWE606_Unchecked_Loop_Condition__Property_73b()).badSink(dataLinkedList  );
+    }
+}

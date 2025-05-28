@@ -1,0 +1,37 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE546_Suspicious_Comment__LATER_12.java
+Label Definition File: CWE546_Suspicious_Comment.label.xml
+Template File: point-flaw-12.tmpl.java
+*/
+/*
+* @description
+* CWE: 546 Suspicious Comment
+* Sinks: LATER
+*    GoodSink: does not contain suspicious comment
+*    BadSink : does not contain a suspicious comment
+* Flow Variant: 12 Control flow: if(IO.staticReturnsTrueOrFalse())
+*
+* */
+
+package testcases.CWE546_Suspicious_Comment;
+
+import testcasesupport.*;
+
+public class CWE546_Suspicious_Comment__LATER_12 extends AbstractTestCase
+{
+    public void bad() throws Throwable
+    {
+        if (IO.staticReturnsTrueOrFalse())
+        {
+            /* FLAW: This is the suspicious comment */
+            /* LATER: There is a bug at this location...I'm not sure why! */
+            IO.writeLine("This a test of the emergency broadcast system");
+        }
+        else
+        {
+
+            /* FIX: don't have those types of comments :) */
+            IO.writeLine("This a test of the emergency broadcast system");
+        }
+    }
+}

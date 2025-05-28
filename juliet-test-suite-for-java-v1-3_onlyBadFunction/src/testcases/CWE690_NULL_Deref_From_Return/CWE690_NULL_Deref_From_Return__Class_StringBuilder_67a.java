@@ -1,0 +1,40 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE690_NULL_Deref_From_Return__Class_StringBuilder_67a.java
+Label Definition File: CWE690_NULL_Deref_From_Return__Class.label.xml
+Template File: sources-sinks-67a.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 690 Unchecked return value is null, leading to a null pointer dereference.
+ * BadSource:  Use a custom method which may return null
+ * GoodSource: Use a custom method that never returns null
+ * Sinks: trim
+ *    GoodSink: Check data for null before calling trim()
+ *    BadSink : Call trim() on possibly null object
+ * Flow Variant: 67 Data flow: data passed in a class from one method to another in different source files in the same package
+ *
+ * */
+
+package testcases.CWE690_NULL_Deref_From_Return;
+
+import testcasesupport.*;
+
+public class CWE690_NULL_Deref_From_Return__Class_StringBuilder_67a extends AbstractTestCase
+{
+    static class Container
+    {
+        public StringBuilder containerOne;
+    }
+
+    public void bad() throws Throwable
+    {
+        StringBuilder data;
+
+        /* POTENTIAL FLAW: Call getStringBuilderBad(), which may return null */
+        data = CWE690_NULL_Deref_From_Return__Class_Helper.getStringBuilderBad();
+
+        Container dataContainer = new Container();
+        dataContainer.containerOne = data;
+        (new CWE690_NULL_Deref_From_Return__Class_StringBuilder_67b()).badSink(dataContainer  );
+    }
+}

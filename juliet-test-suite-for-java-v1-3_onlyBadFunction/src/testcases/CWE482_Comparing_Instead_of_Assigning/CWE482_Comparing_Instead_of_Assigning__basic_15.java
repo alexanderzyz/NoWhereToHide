@@ -1,0 +1,43 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE482_Comparing_Instead_of_Assigning__basic_15.java
+Label Definition File: CWE482_Comparing_Instead_of_Assigning__basic.label.xml
+Template File: point-flaw-15.tmpl.java
+*/
+/*
+* @description
+* CWE: 482 Comparing Instead of Assigning
+* Sinks:
+*    GoodSink: Assigning
+*    BadSink : Comparing instead of assigning
+* Flow Variant: 15 Control flow: switch(7)
+*
+* */
+
+package testcases.CWE482_Comparing_Instead_of_Assigning;
+
+import testcasesupport.*;
+
+import java.security.SecureRandom;
+
+public class CWE482_Comparing_Instead_of_Assigning__basic_15 extends AbstractTestCase
+{
+    public void bad() throws Throwable
+    {
+        switch (7)
+        {
+        case 7:
+            int zeroOrOne = (new SecureRandom()).nextInt(2);
+            boolean isZero = false;
+            if((isZero == (zeroOrOne == 0)) == true) /* FLAW: should be (isZero = (zeroOrOne == 0)) */
+            {
+                IO.writeLine("zeroOrOne is 0");
+            }
+            IO.writeLine("isZero is: " + isZero);
+            break;
+        default:
+            /* INCIDENTAL: CWE 561 Dead Code, the code below will never run */
+            IO.writeLine("Benign, fixed string");
+            break;
+        }
+    }
+}

@@ -1,0 +1,59 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE113_HTTP_Response_Splitting__getParameter_Servlet_setHeaderServlet_05.java
+Label Definition File: CWE113_HTTP_Response_Splitting.label.xml
+Template File: sources-sinks-05.tmpl.java
+*/
+/*
+* @description
+* CWE: 113 HTTP Response Splitting
+* BadSource: getParameter_Servlet Read data from a querystring using getParameter()
+* GoodSource: A hardcoded string
+* Sinks: setHeaderServlet
+*    GoodSink: URLEncode input
+*    BadSink : querystring to setHeader()
+* Flow Variant: 05 Control flow: if(privateTrue) and if(privateFalse)
+*
+* */
+
+package testcases.CWE113_HTTP_Response_Splitting.s02;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+
+import java.net.URLEncoder;
+
+public class CWE113_HTTP_Response_Splitting__getParameter_Servlet_setHeaderServlet_05 extends AbstractTestCaseServlet
+{
+    /* The two variables below are not defined as "final", but are never
+     * assigned any other value, so a tool should be able to identify that
+     * reads of these will always return their initialized values.
+     */
+    private boolean privateTrue = true;
+    private boolean privateFalse = false;
+
+    public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable
+    {
+        String data;
+        if (privateTrue)
+        {
+            /* POTENTIAL FLAW: Read data from a querystring using getParameter */
+            data = request.getParameter("name");
+        }
+        else
+        {
+            /* INCIDENTAL: CWE 561 Dead Code, the code below will never run
+             * but ensure data is inititialized before the Sink to avoid compiler errors */
+            data = null;
+        }
+
+        if (privateTrue)
+        {
+            if (data != null)
+            {
+                /* POTENTIAL FLAW: Input not verified before inclusion in header */
+                response.setHeader("Location", "/author.jsp?lang=" + data);
+            }
+        }
+    }
+}

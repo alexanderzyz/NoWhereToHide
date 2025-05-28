@@ -1,0 +1,119 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE191_Integer_Underflow__int_database_predec_22a.java
+Label Definition File: CWE191_Integer_Underflow__int.label.xml
+Template File: sources-sinks-22a.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 191 Integer Underflow
+ * BadSource: database Read data from a database
+ * GoodSource: A hardcoded non-zero, non-min, non-max, even number
+ * Sinks: decrement
+ *    GoodSink: Ensure there will not be an underflow before decrementing data
+ *    BadSink : Decrement data, which can cause an Underflow
+ * Flow Variant: 22 Control flow: Flow controlled by value of a public static variable. Sink functions are in a separate file from sources.
+ *
+ * */
+
+package testcases.CWE191_Integer_Underflow.s05;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
+import java.util.logging.Level;
+
+public class CWE191_Integer_Underflow__int_database_predec_22a extends AbstractTestCase
+{
+    /* The public static variable below is used to drive control flow in the sink function.
+     * The public static variable mimics a global variable in the C/C++ language family. */
+    public static boolean badPublicStatic = false;
+
+    public void bad() throws Throwable
+    {
+        int data = 0;
+
+        data = Integer.MIN_VALUE; /* Initialize data */
+
+        /* Read data from a database */
+        {
+            Connection connection = null;
+            PreparedStatement preparedStatement = null;
+            ResultSet resultSet = null;
+
+            try
+            {
+                /* setup the connection */
+                connection = IO.getDBConnection();
+
+                /* prepare and execute a (hardcoded) query */
+                preparedStatement = connection.prepareStatement("select name from users where id=0");
+                resultSet = preparedStatement.executeQuery();
+
+                /* POTENTIAL FLAW: Read data from a database query resultset */
+                String stringNumber = resultSet.getString(1);
+                if (stringNumber != null) /* avoid NPD incidental warnings */
+                {
+                    try
+                    {
+                        data = Integer.parseInt(stringNumber.trim());
+                    }
+                    catch (NumberFormatException exceptNumberFormat)
+                    {
+                        IO.logger.log(Level.WARNING, "Number format exception parsing data from string", exceptNumberFormat);
+                    }
+                }
+            }
+            catch (SQLException exceptSql)
+            {
+                IO.logger.log(Level.WARNING, "Error with SQL statement", exceptSql);
+            }
+            finally
+            {
+                /* Close database objects */
+                try
+                {
+                    if (resultSet != null)
+                    {
+                        resultSet.close();
+                    }
+                }
+                catch (SQLException exceptSql)
+                {
+                    IO.logger.log(Level.WARNING, "Error closing ResultSet", exceptSql);
+                }
+
+                try
+                {
+                    if (preparedStatement != null)
+                    {
+                        preparedStatement.close();
+                    }
+                }
+                catch (SQLException exceptSql)
+                {
+                    IO.logger.log(Level.WARNING, "Error closing PreparedStatement", exceptSql);
+                }
+
+                try
+                {
+                    if (connection != null)
+                    {
+                        connection.close();
+                    }
+                }
+                catch (SQLException exceptSql)
+                {
+                    IO.logger.log(Level.WARNING, "Error closing Connection", exceptSql);
+                }
+            }
+        }
+
+        badPublicStatic = true;
+        (new CWE191_Integer_Underflow__int_database_predec_22b()).badSink(data );
+    }
+}

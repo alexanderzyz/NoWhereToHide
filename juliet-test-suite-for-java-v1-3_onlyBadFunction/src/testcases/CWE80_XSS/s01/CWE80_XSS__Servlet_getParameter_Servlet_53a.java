@@ -1,0 +1,34 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE80_XSS__Servlet_getParameter_Servlet_53a.java
+Label Definition File: CWE80_XSS__Servlet.label.xml
+Template File: sources-sink-53a.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 80 Cross Site Scripting (XSS)
+ * BadSource: getParameter_Servlet Read data from a querystring using getParameter()
+ * GoodSource: A hardcoded string
+ * Sinks:
+ *    BadSink : Display of data in web page without any encoding or validation
+ * Flow Variant: 53 Data flow: data passed as an argument from one method through two others to a fourth; all four functions are in different classes in the same package
+ *
+ * */
+
+package testcases.CWE80_XSS.s01;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+
+public class CWE80_XSS__Servlet_getParameter_Servlet_53a extends AbstractTestCaseServlet
+{
+    public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable
+    {
+        String data;
+
+        /* POTENTIAL FLAW: Read data from a querystring using getParameter */
+        data = request.getParameter("name");
+
+        (new CWE80_XSS__Servlet_getParameter_Servlet_53b()).badSink(data , request, response);
+    }
+}

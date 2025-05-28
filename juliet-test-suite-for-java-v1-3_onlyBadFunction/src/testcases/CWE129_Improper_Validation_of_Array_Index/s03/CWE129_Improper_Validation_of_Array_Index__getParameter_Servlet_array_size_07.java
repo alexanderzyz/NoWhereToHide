@@ -1,0 +1,76 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE129_Improper_Validation_of_Array_Index__getParameter_Servlet_array_size_07.java
+Label Definition File: CWE129_Improper_Validation_of_Array_Index.label.xml
+Template File: sources-sinks-07.tmpl.java
+*/
+/*
+* @description
+* CWE: 129 Improper Validation of Array Index
+* BadSource: getParameter_Servlet Read data from a querystring using getParameter()
+* GoodSource: A hardcoded non-zero, non-min, non-max, even number
+* Sinks: array_size
+*    GoodSink: data is used to set the size of the array and it must be greater than 0
+*    BadSink : data is used to set the size of the array, but it could be set to 0
+* Flow Variant: 07 Control flow: if(privateFive==5) and if(privateFive!=5)
+*
+* */
+
+package testcases.CWE129_Improper_Validation_of_Array_Index.s03;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+
+import java.util.logging.Level;
+
+public class CWE129_Improper_Validation_of_Array_Index__getParameter_Servlet_array_size_07 extends AbstractTestCaseServlet
+{
+    /* The variable below is not declared "final", but is never assigned
+     * any other value so a tool should be able to identify that reads of
+     * this will always give its initialized value. */
+    private int privateFive = 5;
+
+    public void bad(HttpServletRequest request, HttpServletResponse response) throws Throwable
+    {
+        int data;
+        if (privateFive==5)
+        {
+            data = Integer.MIN_VALUE; /* Initialize data */
+            /* POTENTIAL FLAW: Read data from a querystring using getParameter() */
+            {
+                String stringNumber = request.getParameter("name");
+                try
+                {
+                    data = Integer.parseInt(stringNumber.trim());
+                }
+                catch(NumberFormatException exceptNumberFormat)
+                {
+                    IO.logger.log(Level.WARNING, "Number format exception reading data from parameter 'name'", exceptNumberFormat);
+                }
+            }
+        }
+        else
+        {
+            /* INCIDENTAL: CWE 561 Dead Code, the code below will never run
+             * but ensure data is inititialized before the Sink to avoid compiler errors */
+            data = 0;
+        }
+
+        if (privateFive==5)
+        {
+            int array[] = null;
+            /* POTENTIAL FLAW: Verify that data is non-negative, but still allow it to be 0 */
+            if (data >= 0)
+            {
+                array = new int[data];
+            }
+            else
+            {
+                IO.writeLine("Array size is negative");
+            }
+            /* do something with the array */
+            array[0] = 5;
+            IO.writeLine(array[0]);
+        }
+    }
+}

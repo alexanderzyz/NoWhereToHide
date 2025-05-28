@@ -1,0 +1,117 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE15_External_Control_of_System_or_Configuration_Setting__PropertiesFile_45.java
+Label Definition File: CWE15_External_Control_of_System_or_Configuration_Setting.label.xml
+Template File: sources-sink-45.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 15 External Control of System or Configuration Setting
+ * BadSource: PropertiesFile Read data from a .properties file (in property named data)
+ * GoodSource: A hardcoded string
+ * Sinks:
+ *    BadSink : Set the catalog name with the value of data
+ * Flow Variant: 45 Data flow: data passed as a private class member variable from one function to another in the same class
+ *
+ * */
+
+package testcases.CWE15_External_Control_of_System_or_Configuration_Setting;
+
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+import java.util.Properties;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+
+import java.util.logging.Level;
+
+import java.sql.*;
+
+
+public class CWE15_External_Control_of_System_or_Configuration_Setting__PropertiesFile_45 extends AbstractTestCase
+{
+    private String dataBad;
+    private String dataGoodG2B;
+
+    private void badSink() throws Throwable
+    {
+        String data = dataBad;
+
+        Connection dbConnection = null;
+
+        try
+        {
+            dbConnection = IO.getDBConnection();
+
+            /* POTENTIAL FLAW: Set the catalog name with the value of data
+             * allowing a nonexistent catalog name or unauthorized access to a portion of the DB */
+            dbConnection.setCatalog(data);
+        }
+        catch (SQLException exceptSql)
+        {
+            IO.logger.log(Level.WARNING, "Error getting database connection", exceptSql);
+        }
+        finally
+        {
+            try
+            {
+                if (dbConnection != null)
+                {
+                    dbConnection.close();
+                }
+            }
+            catch (SQLException exceptSql)
+            {
+                IO.logger.log(Level.WARNING, "Error closing Connection", exceptSql);
+            }
+        }
+
+    }
+
+    /* uses badsource and badsink */
+    public void bad() throws Throwable
+    {
+        String data;
+
+        data = ""; /* Initialize data */
+
+        /* retrieve the property */
+        {
+            Properties properties = new Properties();
+            FileInputStream streamFileInput = null;
+
+            try
+            {
+                streamFileInput = new FileInputStream("../common/config.properties");
+                properties.load(streamFileInput);
+
+                /* POTENTIAL FLAW: Read data from a .properties file */
+                data = properties.getProperty("data");
+            }
+            catch (IOException exceptIO)
+            {
+                IO.logger.log(Level.WARNING, "Error with stream reading", exceptIO);
+            }
+            finally
+            {
+                /* Close stream reading object */
+                try
+                {
+                    if (streamFileInput != null)
+                    {
+                        streamFileInput.close();
+                    }
+                }
+                catch (IOException exceptIO)
+                {
+                    IO.logger.log(Level.WARNING, "Error closing FileInputStream", exceptIO);
+                }
+            }
+        }
+
+        dataBad = data;
+        badSink();
+    }
+}

@@ -1,0 +1,33 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE369_Divide_by_Zero__int_getParameter_Servlet_modulo_51b.java
+Label Definition File: CWE369_Divide_by_Zero__int.label.xml
+Template File: sources-sinks-51b.tmpl.java
+*/
+/*
+ * @description
+ * CWE: 369 Divide by zero
+ * BadSource: getParameter_Servlet Read data from a querystring using getParameter()
+ * GoodSource: A hardcoded non-zero, non-min, non-max, even number
+ * Sinks: modulo
+ *    GoodSink: Check for zero before modulo
+ *    BadSink : Modulo by a value that may be zero
+ * Flow Variant: 51 Data flow: data passed as an argument from one function to another in different classes in the same package
+ *
+ * */
+
+package testcases.CWE369_Divide_by_Zero.s03;
+import testcasesupport.*;
+
+import javax.servlet.http.*;
+
+public class CWE369_Divide_by_Zero__int_getParameter_Servlet_modulo_51b
+{
+    public void badSink(int data , HttpServletRequest request, HttpServletResponse response) throws Throwable
+    {
+
+        /* POTENTIAL FLAW: Zero modulus will cause an issue.  An integer division will
+        result in an exception.  */
+        IO.writeLine("100%" + data + " = " + (100 % data) + "\n");
+
+    }
+}

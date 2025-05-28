@@ -1,0 +1,30 @@
+/* TEMPLATE GENERATED TESTCASE FILE
+Filename: CWE398_Poor_Code_Quality__semicolon_17.java
+Label Definition File: CWE398_Poor_Code_Quality.label.xml
+Template File: point-flaw-17.tmpl.java
+*/
+/*
+* @description
+* CWE: 398 Indicator of Poor Code Quality
+* Sinks: semicolon
+*    GoodSink: Removed statement that has no effect
+*    BadSink : A statement that has no effect
+* Flow Variant: 17 Control flow: for loops
+*
+* */
+
+package testcases.CWE398_Poor_Code_Quality;
+
+import testcasesupport.*;
+
+public class CWE398_Poor_Code_Quality__semicolon_17 extends AbstractTestCase
+{
+    public void bad() throws Throwable
+    {
+        for(int j = 0; j < 1; j++)
+        {
+            ; /* FLAW: This semicolon is a statement that has no effect */
+            IO.writeLine("Hello from bad()");
+        }
+    }
+}
